@@ -32,9 +32,14 @@ def main_vary_N(dataset_name='Chamelon',epsilon=2,e1_r=1/3,e2_r=1/3,N_List=[10,2
     mat0_graph = nx.from_numpy_array(mat0,create_using=nx.Graph)
 
     mat0_node = mat0_graph.number_of_nodes()
+    e3_r = 1 - e1_r - e2_r
+    
     print('Dataset:%s'%(dataset_name))
     print('Node number:%d'%(mat0_graph.number_of_nodes()))
-    print('Edge number:%d'%(mat0_graph.number_of_edges()))
+    print('epsilon:%.2f'%(epsilon))
+    print('e1:%.2f'%(e1_r))
+    print('e2:%.2f'%(e2_r))
+    print('e3:%.2f'%(e3_r))
  
     mat0_par = community.best_partition(mat0_graph)
 
@@ -61,6 +66,7 @@ def main_vary_N(dataset_name='Chamelon',epsilon=2,e1_r=1/3,e2_r=1/3,N_List=[10,2
     all_cc_rel = []
     all_diam_rel = []
 
+    
     for ni in range(len(N_List)):
         ti = time.time()
         n1 = N_List[ni]
@@ -68,7 +74,7 @@ def main_vary_N(dataset_name='Chamelon',epsilon=2,e1_r=1/3,e2_r=1/3,N_List=[10,2
         e1 = e1_r * epsilon
 
         e2 = e2_r * epsilon
-        e3_r = 1 - e1_r - e2_r
+        
 
         e3 = e3_r * epsilon
 
@@ -192,7 +198,6 @@ def main_vary_N(dataset_name='Chamelon',epsilon=2,e1_r=1/3,e2_r=1/3,N_List=[10,2
             mat2_evc_ak = list(mat2_evc_a.keys())
             mat2_evc_val = np.array(list(mat2_evc_a.values()))
         
-
             mat2_diam = cal_diam(mat2)
 
             # calculate the metrics
@@ -204,7 +209,6 @@ def main_vary_N(dataset_name='Chamelon',epsilon=2,e1_r=1/3,e2_r=1/3,N_List=[10,2
 
             # modularity
             mod_rel = cal_rel(mat0_mod,mat2_mod)
-            
         
             # NMI
             labels_true = list(mat0_par.values())
@@ -229,8 +233,8 @@ def main_vary_N(dataset_name='Chamelon',epsilon=2,e1_r=1/3,e2_r=1/3,N_List=[10,2
             evc_MAE_arr[exper] = evc_MAE
             diam_rel_arr[exper] = diam_rel
 
-            print('Nodes=%d,Edges=%d,nmi=%.4f,cc_rel=%.4f,deg_kl=%.4f,mod_rel=%.4f,evc_overlap=%.4f,evc_MAE=%.4f,diam_rel=%.4f' \
-                %(mat2_node,mat2_edge,nmi,cc_rel,deg_kl,mod_rel,evc_overlap,evc_MAE,diam_rel))
+            # print('Nodes=%d,Edges=%d,nmi=%.4f,cc_rel=%.4f,deg_kl=%.4f,mod_rel=%.4f,evc_overlap=%.4f,evc_MAE=%.4f,diam_rel=%.4f' \
+            #     %(mat2_node,mat2_edge,nmi,cc_rel,deg_kl,mod_rel,evc_overlap,evc_MAE,diam_rel))
 
             data_col = [epsilon,exper,n1,nmi,evc_overlap,evc_MAE,deg_kl, \
                 diam_rel,cc_rel,mod_rel]
@@ -290,8 +294,7 @@ if __name__ == '__main__':
             e1_r = e1_ind / 10
             for e2_ind in range(1,9,2):
                 e2_r = e2_ind / 10
-                e3_r = 1 - e1_r - e2_r
-                if e3_r > 0:
+                if e1_ind + e2_ind < 10:
                     # run the function
                     main_vary_N(dataset_name=dataset_name,epsilon=epsilon,e1_r=e1_r,e2_r=e2_r,N_List=N_List,exp_num=exp_num, save_csv=True)
     
