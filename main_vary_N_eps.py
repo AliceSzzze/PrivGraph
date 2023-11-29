@@ -11,15 +11,16 @@ from utils import *
 import os
 
 def main_vary_N(dataset_name='Chamelon',epsilon=2,e1_r=1/3,e2_r=1/3,N_List=[10,20],exp_num=10,save_csv=False):
-    res_path = 'PrivGraph/our_results'
+    res_path = './our_results'
     save_name = res_path + '/' + '%s_%.2f_%.2f_%.2f_%d.csv' %(dataset_name,epsilon,e1_r,e2_r,exp_num)
     
+    # check if we already ran and saved this run. If so, do nothing.
     if save_csv and os.path.exists(save_name):
         return
     
     t_begin = time.time()
 
-    data_path = 'PrivGraph/data/' + dataset_name + '.txt'
+    data_path = './data/' + dataset_name + '.txt'
     mat0,mid = get_mat(data_path)
 
     cols = ['eps','exper','N','nmi','evc_overlap','evc_MAE','deg_kl', \
@@ -30,13 +31,11 @@ def main_vary_N(dataset_name='Chamelon',epsilon=2,e1_r=1/3,e2_r=1/3,N_List=[10,2
     # original graph
     mat0_graph = nx.from_numpy_array(mat0,create_using=nx.Graph)
 
-    mat0_edge = mat0_graph.number_of_edges()
     mat0_node = mat0_graph.number_of_nodes()
     print('Dataset:%s'%(dataset_name))
     print('Node number:%d'%(mat0_graph.number_of_nodes()))
     print('Edge number:%d'%(mat0_graph.number_of_edges()))
-
-
+ 
     mat0_par = community.best_partition(mat0_graph)
 
     mat0_degree = np.sum(mat0,0)
@@ -63,7 +62,6 @@ def main_vary_N(dataset_name='Chamelon',epsilon=2,e1_r=1/3,e2_r=1/3,N_List=[10,2
     all_diam_rel = []
 
     for ni in range(len(N_List)):
-        
         ti = time.time()
         n1 = N_List[ni]
         
@@ -234,8 +232,6 @@ def main_vary_N(dataset_name='Chamelon',epsilon=2,e1_r=1/3,e2_r=1/3,N_List=[10,2
             print('Nodes=%d,Edges=%d,nmi=%.4f,cc_rel=%.4f,deg_kl=%.4f,mod_rel=%.4f,evc_overlap=%.4f,evc_MAE=%.4f,diam_rel=%.4f' \
                 %(mat2_node,mat2_edge,nmi,cc_rel,deg_kl,mod_rel,evc_overlap,evc_MAE,diam_rel))
 
-     
-
             data_col = [epsilon,exper,n1,nmi,evc_overlap,evc_MAE,deg_kl, \
                 diam_rel,cc_rel,mod_rel]
             col_len = len(data_col)
@@ -243,7 +239,6 @@ def main_vary_N(dataset_name='Chamelon',epsilon=2,e1_r=1/3,e2_r=1/3,N_List=[10,2
             data1 = pd.DataFrame(data_col,columns=cols)
             all_data = all_data.append(data1)   
                 
-
         all_nmi_arr.append(np.mean(nmi_arr))
         all_cc_rel.append(np.mean(cc_rel_arr))
         all_deg_kl.append(np.mean(deg_kl_arr))
@@ -251,8 +246,7 @@ def main_vary_N(dataset_name='Chamelon',epsilon=2,e1_r=1/3,e2_r=1/3,N_List=[10,2
         all_evc_overlap.append(np.mean(evc_overlap_arr))
         all_evc_MAE.append(np.mean(evc_MAE_arr))
         all_diam_rel.append(np.mean(diam_rel_arr))
-
-        
+ 
         print('all_index=%d/%d Done.%.2fs\n'%(ni+1,len(N_List),time.time()-ti))
 
     if save_csv == True:
@@ -292,9 +286,9 @@ if __name__ == '__main__':
     N_List = [5,10,15,20,25,30,35]
 
     for epsilon in epsilon_list:
-        for e1_ind in range(1,9):
+        for e1_ind in range(1,9,2):
             e1_r = e1_ind / 10
-            for e2_ind in range(1,9):
+            for e2_ind in range(1,9,2):
                 e2_r = e2_ind / 10
                 e3_r = 1 - e1_r - e2_r
                 if e3_r > 0:

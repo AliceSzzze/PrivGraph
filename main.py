@@ -16,7 +16,7 @@ def main_func(dataset_name='Chamelon',eps=[0.5,1,1.5,2,2.5,3,3.5],e1_r=1/3,e2_r=
 
 
     t_begin = time.time()
-    data_path = 'PrivGraph/data/' + dataset_name + '.txt'
+    data_path = './data/' + dataset_name + '.txt'
     mat0,mid = get_mat(data_path)
     
 
@@ -236,8 +236,7 @@ def main_func(dataset_name='Chamelon',eps=[0.5,1,1.5,2,2.5,3,3.5],e1_r=1/3,e2_r=
             print('Nodes=%d,Edges=%d,nmi=%.4f,cc_rel=%.4f,deg_kl=%.4f,mod_rel=%.4f,evc_overlap=%.4f,evc_MAE=%.4f,diam_rel=%.4f' \
                 %(mat2_node,mat2_edge,nmi,cc_rel,deg_kl,mod_rel,evc_overlap,evc_MAE,diam_rel))
 
-     
-
+    
             data_col = [epsilon,exper,nmi,evc_overlap,evc_MAE,deg_kl, \
                 diam_rel,cc_rel,mod_rel]
             col_len = len(data_col)
