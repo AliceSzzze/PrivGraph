@@ -10,19 +10,21 @@ from utils import *
 
 import os
 
-
-
 def main_vary_N(dataset_name='Chamelon',epsilon=2,e1_r=1/3,e2_r=1/3,N_List=[10,20],exp_num=10,save_csv=False):
+    res_path = 'PrivGraph/our_results'
+    save_name = res_path + '/' + '%s_%.2f_%.2f_%.2f_%d.csv' %(dataset_name,epsilon,e1_r,e2_r,exp_num)
+    
+    if save_csv and os.path.exists(save_name):
+        return
+    
     t_begin = time.time()
 
     data_path = 'PrivGraph/data/' + dataset_name + '.txt'
     mat0,mid = get_mat(data_path)
-    
 
     cols = ['eps','exper','N','nmi','evc_overlap','evc_MAE','deg_kl', \
     'diam_rel','cc_rel','mod_rel']
     
-
     all_data = pd.DataFrame(None,columns=cols)
 
     # original graph
@@ -253,9 +255,6 @@ def main_vary_N(dataset_name='Chamelon',epsilon=2,e1_r=1/3,e2_r=1/3,N_List=[10,2
         
         print('all_index=%d/%d Done.%.2fs\n'%(ni+1,len(N_List),time.time()-ti))
 
-    res_path = './result'
-    save_name = res_path + '/' + '%s_%.2f_%.2f_%.2f_%d.csv' %(dataset_name,epsilon,e1_r,e2_r,exp_num)
-
     if save_csv == True:
         if not os.path.exists(res_path):
             os.mkdir(res_path)
@@ -278,14 +277,13 @@ def main_vary_N(dataset_name='Chamelon',epsilon=2,e1_r=1/3,e2_r=1/3,N_List=[10,2
     print('All time:%.2fs'%(time.time()-t_begin))
 
 
-
 if __name__ == '__main__':
     # set the dataset
     # 'Facebook', 'CA-HepPh', 'Enron'
     dataset_name = 'Chamelon'
 
     # set the privacy budget
-    epsilon_list = [2, 3.5]
+    epsilon_list = [0.5, 2, 3.5]
 
     # set the number of experiments
     exp_num = 10

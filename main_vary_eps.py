@@ -17,7 +17,7 @@ def main_vary_eps(dataset_name='Chamelon',epsilon=2,e1_r=1/3,e2_r=1/3,N=20,exp_n
 
     t_begin = time.time()
 
-    data_path = './data/' + dataset_name + '.txt'
+    data_path = 'PrivGraph/data/' + dataset_name + '.txt'
     mat0,mid = get_mat(data_path)
     
 
@@ -260,7 +260,7 @@ def main_vary_eps(dataset_name='Chamelon',epsilon=2,e1_r=1/3,e2_r=1/3,N=20,exp_n
     # print('Done.%.2fs\n'%(time.time()-ti))
 
     res_path = './result'
-    save_name = res_path + '/' + '%s_%d_%.1f_%.2f_%.2f_%d.csv' %(dataset_name,N,e1_r,e2_r,exp_num)
+    save_name = res_path + '/' + '%s_%d_%.2f_%.2f_%d.csv' %(dataset_name,N,e1_r,e2_r,exp_num)
     if not os.path.exists(res_path):
         os.mkdir(res_path)
     

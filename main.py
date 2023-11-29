@@ -16,8 +16,7 @@ def main_func(dataset_name='Chamelon',eps=[0.5,1,1.5,2,2.5,3,3.5],e1_r=1/3,e2_r=
 
 
     t_begin = time.time()
-
-    data_path = './data/' + dataset_name + '.txt'
+    data_path = 'PrivGraph/data/' + dataset_name + '.txt'
     mat0,mid = get_mat(data_path)
     
 
