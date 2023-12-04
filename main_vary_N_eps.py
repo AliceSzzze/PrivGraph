@@ -10,7 +10,7 @@ from utils import *
 
 import os
 
-def main_vary_N(dataset_name='Chamelon',epsilon=2,e1_r=1/3,e2_r=1/3,N_List=[10,20],exp_num=10,save_csv=False):
+def main_vary_N(dataset_name='Chamelon',epsilon=2,e1_r=1/3,e2_r=1/3,N_List=[10,20],exp_num=10,save_csv=False, mat0=None, mat0_graph=None):
     res_path = './our_results'
     save_name = res_path + '/' + '%s_%.2f_%.2f_%.2f_%d.csv' %(dataset_name,epsilon,e1_r,e2_r,exp_num)
     
@@ -21,7 +21,9 @@ def main_vary_N(dataset_name='Chamelon',epsilon=2,e1_r=1/3,e2_r=1/3,N_List=[10,2
     t_begin = time.time()
 
     data_path = './data/' + dataset_name + '.txt'
-    mat0,mid = get_mat(data_path)
+    
+    if mat0 is not None:
+        mat0,mid = get_mat(data_path)
 
     cols = ['eps','exper','N','nmi','evc_overlap','evc_MAE','deg_kl', \
     'diam_rel','cc_rel','mod_rel']
@@ -29,13 +31,15 @@ def main_vary_N(dataset_name='Chamelon',epsilon=2,e1_r=1/3,e2_r=1/3,N_List=[10,2
     all_data = pd.DataFrame(None,columns=cols)
 
     # original graph
-    mat0_graph = nx.from_numpy_array(mat0,create_using=nx.Graph)
+    if mat0_graph is not None:
+        mat0_graph = nx.from_numpy_array(mat0,create_using=nx.Graph)
 
     mat0_node = mat0_graph.number_of_nodes()
     e3_r = 1 - e1_r - e2_r
     
     print('Dataset:%s'%(dataset_name))
-    print('Node number:%d'%(mat0_graph.number_of_nodes()))
+    print('Node number:%d'%(mat0_node))
+    print('Edge number:%d'%(mat0_graph.number_of_edges()))
     print('epsilon:%.2f'%(epsilon))
     print('e1:%.2f'%(e1_r))
     print('e2:%.2f'%(e2_r))
@@ -72,10 +76,7 @@ def main_vary_N(dataset_name='Chamelon',epsilon=2,e1_r=1/3,e2_r=1/3,N_List=[10,2
         n1 = N_List[ni]
         
         e1 = e1_r * epsilon
-
         e2 = e2_r * epsilon
-        
-
         e3 = e3_r * epsilon
 
         ed = e3
@@ -119,7 +120,6 @@ def main_vary_N(dataset_name='Chamelon',epsilon=2,e1_r=1/3,e2_r=1/3,N_List=[10,2
             comm_n = max(mat1_pvarr) + 1
 
             ev_mat = np.zeros([comm_n,comm_n],dtype=np.int64)
-
         
             # edge vector
             for i in range(comm_n):
@@ -189,7 +189,6 @@ def main_vary_N(dataset_name='Chamelon',epsilon=2,e1_r=1/3,e2_r=1/3,N_List=[10,2
 
             mat2_cc = nx.transitivity(mat2_graph)
 
-        
             mat2_degree = np.sum(mat2,0)
             mat2_deg_dist = np.bincount(np.int64(mat2_degree)) # degree distribution
             
@@ -214,7 +213,6 @@ def main_vary_N(dataset_name='Chamelon',epsilon=2,e1_r=1/3,e2_r=1/3,N_List=[10,2
             labels_true = list(mat0_par.values())
             labels_pred = list(mat2_par.values())
             nmi = metrics.normalized_mutual_info_score(labels_true,labels_pred)
-
 
             # Overlap of eigenvalue nodes 
             evc_overlap = cal_overlap(mat0_evc_ak,mat2_evc_ak,np.int64(0.01*mat0_node))
@@ -257,7 +255,7 @@ def main_vary_N(dataset_name='Chamelon',epsilon=2,e1_r=1/3,e2_r=1/3,N_List=[10,2
         if not os.path.exists(res_path):
             os.mkdir(res_path)
             
-        all_data.to_csv(save_name,index=False,sep=',')
+        all_data.to_csv(save_name,index=False,sep=',', mode='a', header=False)
 
     print('-----------------------------')
 
@@ -285,18 +283,35 @@ if __name__ == '__main__':
 
     # set the number of experiments
     exp_num = 10
+    
+    # load data 
+    data_path = './data/' + dataset_name + '.txt'
+    mat0,mid = get_mat(data_path)
+    mat0_graph = nx.from_numpy_array(mat0,create_using=nx.Graph)
+
 
     # set the number of nodes for community initialization, list type
-    N_List = [5,10,15,20,25,30,35]
-
     for epsilon in epsilon_list:
-        for e1_ind in range(1,9,2):
+        if epsilon <= 1.0:
+            # larger communities for smaller budgets
+            N_List = [5,10,15,20,25,30,35, 40, 45, 50, 55]
+        else:
+            N_List = [5,10,15,20,25,30,35]
+        for e1_ind in range(1,9):
             e1_r = e1_ind / 10
-            for e2_ind in range(1,9,2):
+            for e2_ind in range(1,9):
                 e2_r = e2_ind / 10
                 if e1_ind + e2_ind < 10:
                     # run the function
-                    main_vary_N(dataset_name=dataset_name,epsilon=epsilon,e1_r=e1_r,e2_r=e2_r,N_List=N_List,exp_num=exp_num, save_csv=True)
+                    main_vary_N(dataset_name=dataset_name,
+                                epsilon=epsilon,
+                                e1_r=e1_r,
+                                e2_r=e2_r,
+                                N_List=N_List,
+                                exp_num=exp_num, 
+                                save_csv=True, 
+                                mat0=mat0, 
+                                mat0_graph=mat0_graph)
     
 
 
