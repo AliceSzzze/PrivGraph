@@ -2,6 +2,7 @@ import community
 import networkx as nx
 import time
 import numpy as np
+import multiprocessing
 
 from numpy.random import laplace
 from sklearn import metrics
@@ -22,7 +23,7 @@ def main_vary_N(dataset_name='Chamelon',epsilon=2,e1_r=1/3,e2_r=1/3,N_List=[10,2
 
     data_path = './data/' + dataset_name + '.txt'
     
-    if mat0 is not None:
+    if mat0 is None:
         mat0,mid = get_mat(data_path)
 
     cols = ['eps','exper','N','nmi','evc_overlap','evc_MAE','deg_kl', \
@@ -31,7 +32,7 @@ def main_vary_N(dataset_name='Chamelon',epsilon=2,e1_r=1/3,e2_r=1/3,N_List=[10,2
     all_data = pd.DataFrame(None,columns=cols)
 
     # original graph
-    if mat0_graph is not None:
+    if mat0_graph is None:
         mat0_graph = nx.from_numpy_array(mat0,create_using=nx.Graph)
 
     mat0_node = mat0_graph.number_of_nodes()
@@ -273,30 +274,19 @@ def main_vary_N(dataset_name='Chamelon',epsilon=2,e1_r=1/3,e2_r=1/3,N_List=[10,2
     print('All time:%.2fs'%(time.time()-t_begin))
 
 
-if __name__ == '__main__':
+def experiment_using_epsilon(epsilon: float):
     # set the dataset
     # 'Facebook', 'CA-HepPh', 'Enron'
     dataset_name = 'Chamelon'
-
-    # set the privacy budget
-    epsilon_list = [0.5, 2, 3.5]
-
+    
     # set the number of experiments
     exp_num = 10
     
-    # load data 
-    data_path = './data/' + dataset_name + '.txt'
-    mat0,mid = get_mat(data_path)
-    mat0_graph = nx.from_numpy_array(mat0,create_using=nx.Graph)
-
-
-    # set the number of nodes for community initialization, list type
-    for epsilon in epsilon_list:
-        if epsilon <= 1.0:
-            # larger communities for smaller budgets
-            N_List = [5,10,15,20,25,30,35, 40, 45, 50, 55]
-        else:
-            N_List = [5,10,15,20,25,30,35]
+    if epsilon <= 1.0:
+        # larger communities for smaller budgets
+        N_List = [5,10,15,20,25,30,35, 40, 45, 50, 55]
+    else:
+        N_List = [5,10,15,20,25,30,35]
     for e1_ind in range(1,9):
         e1_r = e1_ind / 10
         for e2_ind in range(1,9):
@@ -309,9 +299,27 @@ if __name__ == '__main__':
                             e2_r=e2_r,
                             N_List=N_List,
                             exp_num=exp_num, 
-                            save_csv=True, 
-                            mat0=mat0, 
-                            mat0_graph=mat0_graph)
+                            save_csv=True)
+    
+if __name__ == '__main__':
+    # set the privacy budget
+    epsilon_list = [0.5, 2.0, 3.5]
+
+    # True if multiprocessing
+    multi = True
+    
+    if multi:
+        # Number of concurrent processes
+        num_processes = multiprocessing.cpu_count()
+        # Using Pool to parallelize the execution of the function
+        with multiprocessing.Pool(processes=num_processes) as pool:
+            # each process will work on an epsilon from the epsilo
+            pool.map(experiment_using_epsilon, epsilon_list)
+    
+    else:
+        #     # set the number of nodes for community initialization, list type
+        for epsilon in epsilon_list:
+            experiment_using_epsilon(epsilon=epsilon)
     
 
 
