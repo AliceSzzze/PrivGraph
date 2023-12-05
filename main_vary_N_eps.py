@@ -255,7 +255,7 @@ def main_vary_N(dataset_name='Chamelon',epsilon=2,e1_r=1/3,e2_r=1/3,N_List=[10,2
         if not os.path.exists(res_path):
             os.mkdir(res_path)
             
-        all_data.to_csv(save_name,index=False,sep=',', mode='a', header=False)
+        all_data.to_csv(save_name,index=False,sep=',')
 
     print('-----------------------------')
 
@@ -297,21 +297,21 @@ if __name__ == '__main__':
             N_List = [5,10,15,20,25,30,35, 40, 45, 50, 55]
         else:
             N_List = [5,10,15,20,25,30,35]
-        for e1_ind in range(1,9):
-            e1_r = e1_ind / 10
-            for e2_ind in range(1,9):
-                e2_r = e2_ind / 10
-                if e1_ind + e2_ind < 10:
-                    # run the function
-                    main_vary_N(dataset_name=dataset_name,
-                                epsilon=epsilon,
-                                e1_r=e1_r,
-                                e2_r=e2_r,
-                                N_List=N_List,
-                                exp_num=exp_num, 
-                                save_csv=True, 
-                                mat0=mat0, 
-                                mat0_graph=mat0_graph)
+    for e1_ind in range(1,9):
+        e1_r = e1_ind / 10
+        for e2_ind in range(1,9):
+            e2_r = e2_ind / 10
+            if e1_ind + e2_ind < 10:
+                # run the function
+                main_vary_N(dataset_name=dataset_name,
+                            epsilon=epsilon,
+                            e1_r=e1_r,
+                            e2_r=e2_r,
+                            N_List=N_List,
+                            exp_num=exp_num, 
+                            save_csv=True, 
+                            mat0=mat0, 
+                            mat0_graph=mat0_graph)
     
 
 
