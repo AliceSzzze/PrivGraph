@@ -299,8 +299,8 @@ def main_vary_N(
 def experiment_using_epsilon(epsilon: float):
     # set the dataset
     # 'Facebook', 'CA-HepPh', 'Enron'
-    dataset_name = "Bitcoin"
-
+    dataset_name = 'Congress'
+    
     # set the number of experiments
     exp_num = 10
 
