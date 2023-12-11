@@ -256,7 +256,7 @@ def main_func(dataset_name='Chamelon',eps=[0.5,1,1.5,2,2.5,3,3.5],e1_r=1/3,e2_r=
         
         print('all_index=%d/%d Done.%.2fs\n'%(ei+1,len(eps),time.time()-ti))
 
-    res_path = './baselines'
+    res_path = './our_params'
     save_name = res_path + '/' + '%s_%d_%.1f_%.2f_%.2f_%d.csv' %(dataset_name,N,t,e1_r,e2_r,exp_num)
     if not os.path.exists(res_path):
         os.mkdir(res_path)
@@ -284,19 +284,19 @@ def main_func(dataset_name='Chamelon',eps=[0.5,1,1.5,2,2.5,3,3.5],e1_r=1/3,e2_r=
 if __name__ == '__main__':
     # set the dataset
     # 'Facebook', 'CA-HepPh', 'Enron'
-    dataset_name = 'Congress'
+    dataset_name = 'CA-HepPh'
     # set the privacy budget, list type
-    eps = [0.5,2.5,3.5]
+    eps = [.5*.98]
 
     # set the ratio of the privacy budget
-    e1_r = 1/3
-    e2_r = 1/3
+    e1_r = .3
+    e2_r = .6
 
     # set the number of experiments
     exp_num = 10
 
     # set the number of nodes for community initialization
-    n1 = 20
+    n1 = 45
 
     # set the resolution parameter
     t = 1.0
@@ -311,8 +311,7 @@ if __name__ == '__main__':
     # main_func(dataset_name="facebook",eps=[3.5*0.98],e1_r=0.7,e2_r=0.2,N=5,t=1.0,exp_num=10)
 
     # The best budget allocation for Enron with a budget of epsilon = 3.5 is e1 = 0.1, e2 = 0.7 and N = 30, predicted score = [-569.2236834]
-    # main_func(dataset_name="enron", eps=[3.5*0.98], e1_r=0.1, e2_r=0.7, N=30, t=1.0, exp_num=10) 
-    main_func(dataset_name="facebook", eps=[0.5, 2.5, 3.5], e1_r=1/3, e2_r=1/3, N=20, t=1.0, exp_num=10) 
+    main_func(dataset_name=dataset_name, eps=eps, e1_r=e1_r, e2_r=e2_r, N=n1, t=1.0, exp_num=10) 
    
 
 
