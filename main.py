@@ -14,7 +14,6 @@ import os
 
 def main_func(dataset_name='Chamelon',eps=[0.5,1,1.5,2,2.5,3,3.5],e1_r=1/3,e2_r=1/3,N=20,t=1.0,exp_num=10,save_csv=True):
 
-
     t_begin = time.time()
     data_path = './data/' + dataset_name + '.txt'
     mat0,mid = get_mat(data_path)
@@ -286,10 +285,8 @@ if __name__ == '__main__':
     # set the dataset
     # 'Facebook', 'CA-HepPh', 'Enron'
     dataset_name = 'Congress'
-
-
     # set the privacy budget, list type
-    eps = [0.5,1,1.5,2,2.5,3,3.5]
+    eps = [0.5,2.5,3.5]
 
     # set the ratio of the privacy budget
     e1_r = 1/3
