@@ -12,7 +12,7 @@ import os
 
 
 
-def main_func(dataset_name='Chamelon',eps=[0.5,1,1.5,2,2.5,3,3.5],e1_r=1/3,e2_r=1/3,N=20,t=1.0,exp_num=10,save_csv=False):
+def main_func(dataset_name='Chamelon',eps=[0.5,1,1.5,2,2.5,3,3.5],e1_r=1/3,e2_r=1/3,N=20,t=1.0,exp_num=10,save_csv=True):
 
 
     t_begin = time.time()
@@ -257,7 +257,7 @@ def main_func(dataset_name='Chamelon',eps=[0.5,1,1.5,2,2.5,3,3.5],e1_r=1/3,e2_r=
         
         print('all_index=%d/%d Done.%.2fs\n'%(ei+1,len(eps),time.time()-ti))
 
-    res_path = './result'
+    res_path = './baselines'
     save_name = res_path + '/' + '%s_%d_%.1f_%.2f_%.2f_%d.csv' %(dataset_name,N,t,e1_r,e2_r,exp_num)
     if not os.path.exists(res_path):
         os.mkdir(res_path)
@@ -285,7 +285,8 @@ def main_func(dataset_name='Chamelon',eps=[0.5,1,1.5,2,2.5,3,3.5],e1_r=1/3,e2_r=
 if __name__ == '__main__':
     # set the dataset
     # 'Facebook', 'CA-HepPh', 'Enron'
-    dataset_name = 'Chamelon'
+    dataset_name = 'Congress'
+
 
     # set the privacy budget, list type
     eps = [0.5,1,1.5,2,2.5,3,3.5]
