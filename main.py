@@ -301,8 +301,17 @@ if __name__ == '__main__':
     # set the resolution parameter
     t = 1.0
 
+    # The best budget allocation for Facebook with a budget of epsilon = 0.5 is e1 = 0.5, e2 = 0.4 and N = 30, predicted score = [-3.76050182]
+    # The best budget allocation for Facebook with a budget of epsilon = 2 is e1 = 0.6, e2 = 0.3 and N = 15, predicted score = [5.13270531]
+    # The best budget allocation for Facebook with a budget of epsilon = 3.5 is e1 = 0.7, e2 = 0.2 and N = 5, predicted score = [10.27950056]
+
     # run the function
-    main_func(dataset_name=dataset_name,eps=eps,e1_r=e1_r,e2_r=e2_r,N=n1,t=t,exp_num=exp_num)
+    # main_func(dataset_name="facebook",eps=[0.5*0.98],e1_r=0.5,e2_r=0.4,N=30,t=1.0,exp_num=10)
+    # main_func(dataset_name="facebook",eps=[2*0.98],e1_r=0.6,e2_r=0.3,N=15,t=1.0,exp_num=10)
+    # main_func(dataset_name="facebook",eps=[3.5*0.98],e1_r=0.7,e2_r=0.2,N=5,t=1.0,exp_num=10)
+
+    # The best budget allocation for Enron with a budget of epsilon = 3.5 is e1 = 0.1, e2 = 0.7 and N = 30, predicted score = [-569.2236834]
+    main_func(dataset_name="enron", eps=[3.5*0.98], e1_r=0.1, e2_r=0.7, N=30, t=1.0, exp_num=10) 
    
 
 
