@@ -285,7 +285,7 @@ def main_vary_N(
         if not os.path.exists(res_path):
             os.mkdir(res_path)
 
-        all_data.to_csv(save_name, index=False, sep=",")
+        all_data.to_csv(save_name+"2", index=False, sep=",")
 
     print("-----------------------------")
 
