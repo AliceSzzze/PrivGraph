@@ -311,7 +311,8 @@ if __name__ == '__main__':
     # main_func(dataset_name="facebook",eps=[3.5*0.98],e1_r=0.7,e2_r=0.2,N=5,t=1.0,exp_num=10)
 
     # The best budget allocation for Enron with a budget of epsilon = 3.5 is e1 = 0.1, e2 = 0.7 and N = 30, predicted score = [-569.2236834]
-    main_func(dataset_name="enron", eps=[3.5*0.98], e1_r=0.1, e2_r=0.7, N=30, t=1.0, exp_num=10) 
+    # main_func(dataset_name="enron", eps=[3.5*0.98], e1_r=0.1, e2_r=0.7, N=30, t=1.0, exp_num=10) 
+    main_func(dataset_name="facebook", eps=[0.5, 2.5, 3.5], e1_r=1/3, e2_r=1/3, N=20, t=1.0, exp_num=10) 
    
 
 
